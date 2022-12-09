@@ -2,8 +2,6 @@ from socket import AF_INET, socket, SOCK_STREAM
 from threading import Thread
 import utils
 
-key = ""
-
 
 def accept_incoming_connections():
     """Sets up handling for incoming clients."""
@@ -29,9 +27,10 @@ def handle_client(client):  # Takes client socket as argument.
         msg = client.recv(BUFSIZ)
         if msg != bytes("{quit}", "utf8"):
             sp = msg.decode("utf8").split('#')
+            ciphertype = sp[2]
             key = sp[1]
             encrypted = sp[0]
-            msg = utils.decrypt(encrypted, key,cipher="rc4")
+            msg = utils.decrypt(encrypted, key, ciphertype)
             print("Key, text: ", key, encrypted)
             print("Decrypted: ", msg)
             msg = msg.encode("utf8")

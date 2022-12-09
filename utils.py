@@ -10,10 +10,23 @@ import rsa
 import RC4
 
 publicKey, privateKey = rsa.newkeys(512)
-cipherType = "ceaser"
-plaint =" "
-encMessage= ""
-otp_msg=otp.otpmsg
+cipherType = ""
+plaint = " "
+encMessage = ""
+otp_msg = otp.otpmsg
+
+
+def set_cipher_type(type):
+    global cipherType
+    cipherType = type
+    print("Cipher is now :", cipherType)
+
+
+def get_cipher_type():
+    global cipherType
+    return cipherType
+
+
 def generateKey(string, key):
     key = list(key)
     if len(string) == len(key):
@@ -30,43 +43,46 @@ extract the option from a list and pass it through the 3rd argument
 """
 
 
-def encryption(text, s, cipher):
-    plaintext=text
+def encryption(text, s, cipher=cipherType):
+    plaintext = text
     global plaint
     global encMessage
     plaint = plaintext
     global cipherType
     cipherType = cipher
+
+    print("encrypt func => Cipher is: ", cipherType)
+
     if(cipherType == "hill"):
-        return hill.HillCipher(text,s)
+        return hill.HillCipher(text, s)
         """
         execute cypher encryption here
         """
         pass
     elif(cipherType == "ceaser"):
-        return encrypt.encryptceaser(text,s)
-    elif(cipherType=="mono"):
+        return encrypt.encryptceaser(text, s)
+    elif(cipherType == "mono"):
         return encrypt.encryptmono(text)
         pass
-    elif(cipherType== "playfair"):
+    elif(cipherType == "playfair"):
         return playfair.encryptByPlayfairCipher(text, s)
-    elif(cipherType== "otp"):
+    elif(cipherType == "otp"):
         return text
-    elif(cipherType== "railfence"):
-        return railfence.encryptRailFence(text,int(s))
-    elif(cipherType== "polyalph"):
+    elif(cipherType == "railfence"):
+        return railfence.encryptRailFence(text, int(s))
+    elif(cipherType == "polyalpha"):
         return encrypt.cipherpolyalphabetic(text, s)
-    elif(cipherType=="columnar"):
-        return columnar.encryptMessage(text,s)
-    elif(cipherType=="des"):
-        rkb, rk=DES.get_keys(s)
-        return DES.encrypt(text,rkb,rk)
-    elif(cipherType== "rsa"):
-        encMessage = rsa.encrypt(text.encode(), publicKey)
+    elif(cipherType == "columnar"):
+        return columnar.encryptMessage(text, s)
+    elif(cipherType == "des"):
+        rkb, rk = DES.encrypt(s)
+        return DES.encrypt(text, rkb, rk)
+    elif(cipherType == "rsa"):
+        encMessage = rsa.encrypt(text.encode(), s)
         return encMessage
-    elif(cipherType=="ecc"):
+    elif(cipherType == "ecc"):
         "code required from ecc cannot display "
-    elif(cipherType== "rc4"):
+    elif(cipherType == "rc4"):
         return RC4.encrypt(text, s)
 
 
@@ -74,39 +90,44 @@ def encryption(text, s, cipher):
 extract the option from a list and pass it through the 3rd argument
 """
 
-#DECRYPTION OF HILL DOESNOT WORK :(
-def decrypt(text, s, cipher):
-    global cipherType
+# DECRYPTION OF HILL DOESNOT WORK :(
+
+
+def decrypt(text, s, cipherType):
     global plaint
-    cipherType = cipher
+
+    print("decrypt func => Cipher is: ", cipherType)
     if cipherType == "hill":
-        return plaint
-        # encrypt.HillCipher(text, s, False)
-    elif cipherType =="mono":
-        return plaint
-    elif cipherType== "playfair":
-        return playfair.decryptPlayfair(text,s)
-    elif cipherType=="otp":
-        if(int(s)==int(otp_msg)):
+        hill.decrypthill(text, s, False)
+    elif cipherType == "ceaser":
+        return encrypt.decryptceaser(text, s)
+    elif cipherType == "mono":
+        return encrypt.deciphermono(text)
+    elif cipherType == "playfair":
+        return playfair.decryptPlayfair(text, s)
+    elif cipherType == "otp":
+        if(int(s) == int(otp_msg)):
             return text
         else:
             return "Unverified, cannot send text!"
-    elif cipherType== "railfence":
-        return railfence.decryptRailFence(text,s)
-    elif cipherType== "polyalpha":
+    elif cipherType == "railfence":
+        return railfence.decryptRailFence(text, int(s))
+    elif cipherType == "polyalpha":
         return encrypt.decryptpoly(text, s)
-    elif cipherType=="columnar":
-        return columnar.decryptMessage(text,s)
-    elif cipherType=="des":
-        rkb, rk= decryptDES.get_keys(s)
-        return decryptDES.encrypt(text,rkb,rk)
-    elif cipherType=="rsa":
-        decMessage = rsa.decrypt(encMessage, privateKey).decode()
+    elif cipherType == "columnar":
+        return columnar.decryptMessage(text, s)
+    elif cipherType == "des":
+        rkb, rk = decryptDES.get_keys(s)
+        return decryptDES.encrypt(text, rkb, rk)
+    elif cipherType == "rsa":
+        decMessage = rsa.decrypt(text, s).decode()
         return decMessage
-    elif cipherType=="ecc":
+    elif cipherType == "ecc":
         "code required from ECC"
-    elif cipherType== "rc4":
-        return RC4.decrypt(text,s)
+    elif cipherType == "rc4":
+        return RC4.decrypt(text, s)
+
+
 """
 text="hello geeks"
 encMessage = rsa.encrypt(text.encode(), publicKey)

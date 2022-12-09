@@ -1,22 +1,40 @@
 import numpy as np
+import string
 
-def encryptceaser(text,s):
+
+def encryptceaser(text, s):
     print("TEXT: ", text)
     result = ""
-  
+    s = int(s)
     # traverse text
     for i in range(len(text)):
         char = text[i]
- 
+
         # Encrypt uppercase characters
         if (char.isupper()):
             result += chr((ord(char) + s-65) % 26 + 65)
- 
+
         # Encrypt lowercase characters
         else:
             result += chr((ord(char) + s - 97) % 26 + 97)
- 
+
     return result
+
+
+def decryptceaser(text, s):
+    decrypted_message = ""
+    alphabet = string.ascii_lowercase
+    key = int(s)
+    for c in text:
+
+        if c in alphabet:
+            position = alphabet.find(c)
+            new_position = (position - key) % 26
+            new_character = alphabet[new_position]
+            decrypted_message += new_character
+        else:
+            decrypted_message += c
+    return decrypted_message
 
 
 def generateKey(string, key):
@@ -28,22 +46,25 @@ def generateKey(string, key):
                        len(key)):
             key.append(key[i % len(key)])
     return("" . join(key))
-     
+
 # This function returns the
 # encrypted text generated
 # with the help of the key
+
+
 def cipherpolyalphabetic(string, key):
     cipher_text = []
-    key=generateKey(string, key)
+    key = generateKey(string, key)
     for i in range(len(string)):
         x = (ord(string[i]) +
              ord(key[i])) % 26
         x += ord('A')
         cipher_text.append(chr(x))
     return("" . join(cipher_text))
-     
+
+
 def decryptpoly(cipher_text, key):
-    print("cipher:",cipher_text)
+    print("cipher:", cipher_text)
     key_length = len(key)
     key_as_int = [ord(i) for i in key]
     ciphertext_int = [ord(i) for i in cipher_text]
@@ -53,6 +74,8 @@ def decryptpoly(cipher_text, key):
         plaintext += chr(value + 65)
     print("plaiintext: ", plaintext)
     return plaintext
+
+
 """
     print("cipher= ",cipher_text)
     orig_text = []
@@ -63,6 +86,8 @@ def decryptpoly(cipher_text, key):
     print("decrypted " , orig_text)
     return("" . join(orig_text))
 """
+
+
 def polyalphabetic(string, key, encrypt=True):
     """
     params:
@@ -91,22 +116,27 @@ def polyalphabetic(string, key, encrypt=True):
 
     return result
 
-keys={'a':'z','b':'y','c':'x','d':'w','e':'v','f':'u','g':'t','h':'s','i':'r','j':'q','k':'p','l':'o','m':'n'}
+
+keys = {'a': 'z', 'b': 'y', 'c': 'x', 'd': 'w', 'e': 'v', 'f': 'u',
+        'g': 't', 'h': 's', 'i': 'r', 'j': 'q', 'k': 'p', 'l': 'o', 'm': 'n', 'n': 'm'}
+
 
 def encryptmono(text):
-    text=str(text)
-    encrypting=[]
+    text = str(text)
+    encrypting = []
     for l in text:
-        encrypting.append(keys.get(l,l))
+        encrypting.append(keys.get(l, l))
     print(''.join(encrypting))
     return ''.join(encrypting)
+
+
 def deciphermono(text):
-    reverse_keys={}
-    for key,value in keys.items():
-         reverse_keys[value]=key
-    text=str(text)
-    decrypted=[]
+    reverse_keys = {}
+    for key, value in keys.items():
+        reverse_keys[value] = key
+    text = str(text)
+    decrypted = []
     for l in text:
-        decrypted.append(reverse_keys.get(l,l))
+        decrypted.append(reverse_keys.get(l, l))
     print(''.join(decrypted))
     return ''.join(decrypted)
