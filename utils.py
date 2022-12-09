@@ -75,7 +75,7 @@ def encryption(text, s, cipher=cipherType):
     elif(cipherType == "columnar"):
         return columnar.encryptMessage(text, s)
     elif(cipherType == "des"):
-        rkb, rk = DES.get_keys(s)
+        rkb, rk = DES.encrypt(s)
         return DES.encrypt(text, rkb, rk)
     elif(cipherType == "rsa"):
         encMessage = rsa.encrypt(text.encode(), publicKey)
@@ -100,8 +100,10 @@ def decrypt(text, s, cipherType):
     if cipherType == "hill":
         return plaint
         # encrypt.HillCipher(text, s, False)
+    elif cipherType == "ceaser":
+        return encrypt.decryptceaser(text, s)
     elif cipherType == "mono":
-        return plaint
+        return encrypt.deciphermono(text)
     elif cipherType == "playfair":
         return playfair.decryptPlayfair(text, s)
     elif cipherType == "otp":
@@ -110,7 +112,7 @@ def decrypt(text, s, cipherType):
         else:
             return "Unverified, cannot send text!"
     elif cipherType == "railfence":
-        return railfence.decryptRailFence(text, s)
+        return railfence.decryptRailFence(text, int(s))
     elif cipherType == "polyalpha":
         return encrypt.decryptpoly(text, s)
     elif cipherType == "columnar":
@@ -119,7 +121,7 @@ def decrypt(text, s, cipherType):
         rkb, rk = decryptDES.get_keys(s)
         return decryptDES.encrypt(text, rkb, rk)
     elif cipherType == "rsa":
-        decMessage = rsa.decrypt(encMessage, privateKey).decode()
+        decMessage = rsa.decrypt(text, s).decode()
         return decMessage
     elif cipherType == "ecc":
         "code required from ECC"

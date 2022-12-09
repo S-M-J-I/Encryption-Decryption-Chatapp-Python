@@ -85,6 +85,7 @@ entry_field.pack()
 options = [
     "polyalpha",
     "hill",
+    "mono",
     "ceaser",
     "playfair",
     "otp",

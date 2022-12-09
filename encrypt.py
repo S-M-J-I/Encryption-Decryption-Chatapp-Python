@@ -1,10 +1,11 @@
 import numpy as np
+import string
 
 
 def encryptceaser(text, s):
     print("TEXT: ", text)
     result = ""
-
+    s = int(s)
     # traverse text
     for i in range(len(text)):
         char = text[i]
@@ -18,6 +19,22 @@ def encryptceaser(text, s):
             result += chr((ord(char) + s - 97) % 26 + 97)
 
     return result
+
+
+def decryptceaser(text, s):
+    decrypted_message = ""
+    alphabet = string.ascii_lowercase
+    key = int(s)
+    for c in text:
+
+        if c in alphabet:
+            position = alphabet.find(c)
+            new_position = (position - key) % 26
+            new_character = alphabet[new_position]
+            decrypted_message += new_character
+        else:
+            decrypted_message += c
+    return decrypted_message
 
 
 def generateKey(string, key):
@@ -101,7 +118,7 @@ def polyalphabetic(string, key, encrypt=True):
 
 
 keys = {'a': 'z', 'b': 'y', 'c': 'x', 'd': 'w', 'e': 'v', 'f': 'u',
-        'g': 't', 'h': 's', 'i': 'r', 'j': 'q', 'k': 'p', 'l': 'o', 'm': 'n'}
+        'g': 't', 'h': 's', 'i': 'r', 'j': 'q', 'k': 'p', 'l': 'o', 'm': 'n', 'n': 'm'}
 
 
 def encryptmono(text):
