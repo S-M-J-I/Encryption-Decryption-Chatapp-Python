@@ -1,20 +1,25 @@
 from socket import AF_INET, socket, SOCK_STREAM
 from threading import Thread
 import tkinter
+from tkinter import *
 import base64
 import os
 import encrypt
 import utils
 import hill
 import otp
+
+
 start = 1
 encryptionType = "rc4"
+
 
 def receive():
     """Handles receiving of messages."""
     while True:
         try:
             msg = client_socket.recv(BUFSIZ).decode("utf8")
+            print(msg)
             msg_list.insert('end', msg)
         except OSError:
             break
@@ -26,8 +31,9 @@ def send(event=None):  # event is passed by binders.
     key = my_key.get()
     my_msg.set("")  # Clears input field.
     if start != 1:
+        encryptionType = clicked.get()
         msg = utils.encryption(msg, key, cipher=encryptionType)
-        msg = f"{msg}#{key}"
+        msg = f"{msg}#{key}#{encryptionType}"
     client_socket.send(bytes(msg, "utf8"))
     if msg == "{quit}":
         client_socket.close()
@@ -46,10 +52,6 @@ def on_closing(event=None):
 def get_key(event=None):
     key = my_key.get()
     my_key.set("")
-
-
-def encryptclient(event=None):
-    key = my_key.get()
 
 
 top = tkinter.Tk()
@@ -78,8 +80,29 @@ message.pack()
 entry_field = tkinter.Entry(top, textvariable=my_msg)
 entry_field.bind("<Return>", send)
 entry_field.pack()
-encrypt_button = tkinter.Button(top, text="Encrypt", command=encryptclient)
-encrypt_button.pack()
+
+# CIPHER OPTIONS AVAILABLE TO THE USER
+options = [
+    "polyalpha",
+    "hill",
+    "ceaser",
+    "playfair",
+    "otp",
+    "railfence",
+    "columnar",
+    "des",
+    "rsa",
+    "ecc",
+    "rc4"
+
+
+]
+clicked = StringVar()
+clicked.set("rc4")
+drop = OptionMenu(top, clicked, *options)
+drop.pack()
+
+
 gap = tkinter.Label(top, text=" ")
 gap.pack()
 send_button = tkinter.Button(top, text="Send", command=send)
