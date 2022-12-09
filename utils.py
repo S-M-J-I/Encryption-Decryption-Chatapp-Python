@@ -78,7 +78,7 @@ def encryption(text, s, cipher=cipherType):
         rkb, rk = DES.encrypt(s)
         return DES.encrypt(text, rkb, rk)
     elif(cipherType == "rsa"):
-        encMessage = rsa.encrypt(text.encode(), publicKey)
+        encMessage = rsa.encrypt(text.encode(), s)
         return encMessage
     elif(cipherType == "ecc"):
         "code required from ecc cannot display "
@@ -98,8 +98,7 @@ def decrypt(text, s, cipherType):
 
     print("decrypt func => Cipher is: ", cipherType)
     if cipherType == "hill":
-        return plaint
-        # encrypt.HillCipher(text, s, False)
+        hill.decrypthill(text, s, False)
     elif cipherType == "ceaser":
         return encrypt.decryptceaser(text, s)
     elif cipherType == "mono":
